@@ -1,5 +1,4 @@
 from quotes import get_quote_for_mood
-from api import get_random_quote_from_api
 
 MOOD_RESPONSES = {
     "happy": {
@@ -84,12 +83,6 @@ def run():
         print(f"\n{entry['message']}")
         print(entry["encouragement"])
         print(format_quote(quote))
-
-        # Bonus: try to show an extra random quote from the API
-        api_quote = get_random_quote_from_api()
-        if api_quote:
-            print(f"\nBonus quote: {format_quote(api_quote)}")
-
         print()
 
 

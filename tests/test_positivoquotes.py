@@ -26,10 +26,9 @@ def test_all_moods_sorted():
     assert ALL_MOODS == sorted(ALL_MOODS)
 
 
-@patch("positivoquotes.get_random_quote_from_api", return_value=None)
 @patch("positivoquotes.get_quote_for_mood")
 @patch("builtins.input", side_effect=["happy", "quit"])
-def test_run_happy_then_quit(mock_input, mock_mood_quote, mock_api, capsys):
+def test_run_happy_then_quit(mock_input, mock_mood_quote, capsys):
     mock_mood_quote.return_value = {"quote": "Smile!", "author": "Test"}
     from positivoquotes import run
     run()
@@ -39,24 +38,20 @@ def test_run_happy_then_quit(mock_input, mock_mood_quote, mock_api, capsys):
     assert "Goodbye" in output
 
 
-@patch("positivoquotes.get_random_quote_from_api", return_value=None)
 @patch("builtins.input", side_effect=["xyz", "quit"])
-def test_run_invalid_mood(mock_input, mock_api, capsys):
+def test_run_invalid_mood(mock_input, capsys):
     from positivoquotes import run
     run()
     output = capsys.readouterr().out
     assert "don't recognize" in output
 
 
-@patch("positivoquotes.get_random_quote_from_api")
 @patch("positivoquotes.get_quote_for_mood")
 @patch("builtins.input", side_effect=["anxious", "quit"])
-def test_run_new_mood_anxious(mock_input, mock_mood_quote, mock_api, capsys):
+def test_run_new_mood_anxious(mock_input, mock_mood_quote, capsys):
     mock_mood_quote.return_value = {"quote": "Breathe.", "author": "Guru"}
-    mock_api.return_value = {"quote": "Bonus!", "author": "API"}
     from positivoquotes import run
     run()
     output = capsys.readouterr().out
     assert "anxious" in output.lower() or "overwhelming" in output.lower()
     assert '"Breathe." — Guru' in output
-    assert "Bonus quote" in output
